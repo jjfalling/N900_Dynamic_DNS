@@ -1,0 +1,92 @@
+#! /usr/bin/env python
+#
+# IPV6 Dynamic update client for the N900
+#
+# ***************************************************************************
+# *   Copyright (C) 2011 by Jeremy Falling except where noted.              *
+# *   Some coding assistance provided by Alex Gingerich.                    *
+# *                                                                         *
+# *   This program is free software; you can redistribute it and/or modify  *
+# *   it under the terms of the GNU General Public License as published by  *
+# *   the Free Software Foundation; either version 2 of the License, or     *
+# *   (at your option) any later version.                                   *
+# *                                                                         *
+# *   This program is distributed in the hope that it will be useful,       *
+# *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+# *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+# *   GNU General Public License for more details.                          *
+# *                                                                         *
+# *   You should have received a copy of the GNU General Public License     *
+# *   along with this program; if not, write to the                         *
+# *   Free Software Foundation, Inc.,                                       *
+# *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+# ***************************************************************************
+
+##########################################################################
+#There are two comments below with lines you must change to make this work
+##########################################################################
+
+import urllib
+import pycurl
+import time
+import string
+import os
+import socket
+import sys
+import commands
+
+###################################################################################################
+# PLEASE change the following two lines. The pf (preshared key) must match the key defined on your 
+# server:
+###################################################################################################
+pf = {'fadf8Mu59vDJGasfdajs5646dsf48bysvGbsdfgvsvgDdsxcd'}
+host = "Fqdn or ip of the server"
+
+arguments = "-c 1 -q"
+run_dns_update = 0
+
+count = 0
+while (count < 10):
+
+        print 'Attempt: ', count
+
+        command = "ping6 "+host+" "+arguments
+
+        try:
+                result = commands.getoutput(command).split('\n')[1]
+                ping_exit = 1
+        except Exception:
+                try:
+                        result = commands.getoutput(command).split('\n')[0]
+                        ping_exit = 0
+                except Exception:
+                        result = "Error executing command"
+
+        print ping_exit
+
+        if ping_exit == 1:
+                count = 10
+                run_dns_update = 1
+        else:
+                count = count + 1
+                time.sleep(5)
+
+if run_dns_update == 1:
+
+        time.sleep(10)
+
+        c = pycurl.Curl()
+    
+    ############################################################################################
+    #change the following line to match the url of your server. fqdn should match the host above
+    ############################################################################################
+        c.setopt(c.URL, 'http://Fqdn_or_ip_of_server/update.php')
+
+        c.setopt(c.POSTFIELDS, urllib.urlencode(pf))
+        c.setopt(c.VERBOSE, 1)
+        c.perform()
+        c.close()
+
+else:
+        print 'cannot reach host, will not attempt to update dns'
+

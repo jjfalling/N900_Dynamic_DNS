@@ -1,0 +1,14 @@
+;DONT EDIT. FILE IS UPDATED BY A SCRIPT
+$ttl 120
+mobile.example.com.    IN      SOA     ns.example.com. admin.example.com. (
+        ;###serial_marker
+2010101188
+        120
+        7200
+        604800
+        38400 )
+
+mobile.example.com.    IN      NS      ns.example.com
+
+;###record_marker
+mobile.example.com.    IN      AAAA    2607:fb90:cafe:d:999:3434:9edc:37483
