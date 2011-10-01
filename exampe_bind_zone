@@ -1,7 +1,8 @@
 ;DONT EDIT. FILE IS UPDATED BY A SCRIPT
 $ttl 120
 mobile.example.com.    IN      SOA     ns.example.com. admin.example.com. (
-        ;###serial_marker
+
+;###serial_marker
 2010101188
         120
         7200

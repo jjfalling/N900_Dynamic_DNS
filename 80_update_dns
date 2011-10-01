@@ -1,10 +1,15 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
+PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
+
+#############################################################################
+# 80_update_dns
+# IPV6 Dynamic update client for the N900/Maemo
 #
-# IPV6 Dynamic update client for the N900
+#############################################################################
+#
 #
 # ***************************************************************************
 # *   Copyright (C) 2011 by Jeremy Falling except where noted.              *
-# *   Some coding assistance provided by Alex Gingerich.                    *
 # *                                                                         *
 # *   This program is free software; you can redistribute it and/or modify  *
 # *   it under the terms of the GNU General Public License as published by  *
@@ -35,6 +40,7 @@ import socket
 import sys
 import commands
 
+
 ###################################################################################################
 # PLEASE change the following two lines. The pf (preshared key) must match the key defined on your 
 # server:
@@ -42,8 +48,11 @@ import commands
 pf = {'fadf8Mu59vDJGasfdajs5646dsf48bysvGbsdfgvsvgDdsxcd'}
 host = "Fqdn or ip of the server"
 
+
+
 arguments = "-c 1 -q"
 run_dns_update = 0
+
 
 count = 0
 while (count < 10):
@@ -89,4 +98,5 @@ if run_dns_update == 1:
 
 else:
         print 'cannot reach host, will not attempt to update dns'
+
 
