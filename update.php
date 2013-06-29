@@ -31,6 +31,12 @@ $ip_addy = $_SERVER["REMOTE_ADDR"];
 //counter file is just for stats
 $counter_file = "/var/www/ip_info/.counter";
 
+#do a check to see if the xforwared for header is used, if not use the remote address header
+if ( empty($ip_addy) ) {
+        $ip_addy = $_SERVER["REMOTE_ADDR"];
+
+}
+
 //Check to see if the client is authorized by checking to see if a key was sent.
 
 //*******************************************************
