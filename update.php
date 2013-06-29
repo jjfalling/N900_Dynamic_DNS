@@ -27,7 +27,7 @@
 //**************************************************
 
 $key = $_POST['key'];
-$ip_addy = $_SERVER["REMOTE_ADDR"];
+$ip_addy = $_SERVER["HTTP_X_FORWARDED_FOR"];
 //counter file is just for stats
 $counter_file = "/var/www/ip_info/.counter";
 
