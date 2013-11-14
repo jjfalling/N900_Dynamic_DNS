@@ -21,15 +21,18 @@ PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
 #*   along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
 #****************************************************************************
 
+#hostname of you are updating with a trailing .
+hostname="mobile.example.com."
+
+#path to the zone file
+zonefile="/var/lib/named/master/mobile.example.com"
+
 
 #############################################################################
 
-# ** You must update the location of the zone file you are updating 
-#    as well as the hostname you are updating below. **
-
 #look for ###edit_marker and note the line number +1
-pre_num=$(sed -ne /###record_marker/= /etc/namedb/mobile.example.com)
-serial_line=$(sed -ne /###serial_marker/= /etc/namedb/mobile.example.com)
+pre_num=$(sed -ne /###record_marker/= $zonefile)
+serial_line=$(sed -ne /###serial_marker/= $zonefile)
 
 
 #get ip addrss passed to this script
@@ -40,7 +43,7 @@ ip_address=$1
 line_num=$((pre_num+1))
 serial_line=$((serial_line+1))
 serial_line_sed=""$serial_line"p"
-serial_num=`sed -n "$serial_line_sed" /etc/namedb/mobile.example.com`
+serial_num=`sed -n "$serial_line_sed" $zonefile`
 new_serial_num=$((serial_num+1))
 new_serial_num_sed="c\\"$new_serial_num""
 
@@ -51,18 +54,9 @@ touch /tmp/dns_tmp_file1
 
 
 #write to temp files
-sudo sed "$line_num c\mobile.example.com.    IN      AAAA    $ip_address" /etc/namedb/mobile.example.com > /tmp/dns_tmp_file
+sudo sed "$line_num c$hostname    IN      AAAA    $ip_address" $zonefile > /tmp/dns_tmp_file
 sudo sed "$serial_line $new_serial_num_sed" /tmp/dns_tmp_file > /tmp/dns_tmp_file1
 
 
 #move temp file to dns dir
-sudo cp /tmp/dns_tmp_file1 /etc/namedb/mobile.example.com
-
-
-#reload bind to refresh zone
-sudo rndc reload
-
-
-exit 0
-
-
+sudo cp /tmp/dns_tmp_file1 $zonefile
